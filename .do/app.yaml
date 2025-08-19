@@ -1,0 +1,14 @@
+# DigitalOcean App Platform Spec
+name: "webinar-1755563115553"
+region: nyc
+static_sites:
+  - name: presentation
+    github:
+      repo: ElanHasson/1755563115553
+      branch: main
+      deploy_on_push: true
+    build_command: npm ci && npm run build
+    output_dir: out
+    routes:
+      - path: /
+    environment_slug: node-js
