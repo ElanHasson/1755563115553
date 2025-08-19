@@ -16,7 +16,7 @@ export default function Slide() {
 
 \`\`\`mermaid
 flowchart LR
-  subgraph SB[Diagram A — Contracts and Flows (System Boundary)]
+  subgraph SB["Diagram A — Contracts and Flows (System Boundary)"]
     IN[Inputs\n- Goal\n- Constraints\n- Tool permissions\n- Memory slice] --> ORCH[Orchestrator\nplan → assign → execute → verify]
     ORCH --> OUT[Outputs\n- Structured result\n- Trace\n- Metrics]
     ORCH --> TOOLS[(Tools/APIs)]

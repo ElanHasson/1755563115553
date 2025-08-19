@@ -50,19 +50,18 @@ Blackboard (shared memory)
 - Use versioned artifacts, TTLs, and critics that watch the board
 - Great for discovery-heavy or mixed-modality workflows
 
-\`\`\`mermaid
-flowchart TD
+\`\`\`mermaid flowchart TD
   subgraph BB[Blackboard]
-    X[(Artifact X v1..n)]
-    Y[(Hypotheses/Tasks)]
+    X[Artifact X v1..n]
+    Y[Hypotheses/Tasks]
   end
-  P[Planner] -- posts tasks --> BB
-  A1[Agent A] -- reads -> BB
-  A1 -- writes -> BB
-  A2[Agent B] -- reads -> BB
-  A2 -- writes -> BB
-  Crit[Critic] -- monitors -> BB
-  Crit -- accept/fix flags -> BB
+  P[Planner] -->|posts tasks| BB
+  A1[Agent A] -->|reads| BB
+  A1 -->|writes| BB
+  A2[Agent B] -->|reads| BB
+  A2 -->|writes| BB
+  Crit[Critic] -->|monitors| BB
+  Crit -->|accept/fix flags| BB
 \`\`\`
 
 \`\`\`python
