@@ -38,10 +38,18 @@ body {
   font-size: 1.5rem;
   line-height: 2;
   max-width: 800px;
+  padding-left: 1.5rem;
 }
 
 .slide li {
   margin: 0.25rem 0;
+}
+
+.slide ul ul, .slide ol ol, .slide ul ol, .slide ol ul {
+  font-size: 1.3rem;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+  padding-left: 2rem;
 }
 
 .title-slide {
