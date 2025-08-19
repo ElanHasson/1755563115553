@@ -151,7 +151,6 @@ export default function Presentation() {
         </button>
         <button 
           onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
-          style={{ marginLeft: '20px' }}
         >
           {showSpeakerNotes ? 'Hide' : 'Show'} Notes
         </button>
