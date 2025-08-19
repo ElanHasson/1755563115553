@@ -14,6 +14,7 @@ export default function Slide() {
 - Observable by design: traces, schemas, budgets on every step
 
 \`\`\`mermaid
+
 flowchart LR
   U[User Goal] --> O[Orchestrator]
   O --> P[Planner]
@@ -21,7 +22,7 @@ flowchart LR
   O --> D[Debate]
   O --> C[Critic/Judge]
   O --> G[Guardrails]
-  P --> E1[Executor(s)]
+  P --> E1["Executor(s)"]
   R --> E1
   D --> C
   E1 --> C
