@@ -194,7 +194,7 @@ flowchart TD
 
 ## Minimal live test outline
 - Run planner -> view DAG
-- Execute research with SEARCH_TOOL
+- Execute research with \`SEARCH_TOOL\`
 - Validate via schema + critic
 - Update DAG and iterate`;
   const mermaidRef = useRef(0);
