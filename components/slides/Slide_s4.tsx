@@ -2,6 +2,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useEffect, useRef } from 'react';
 import mermaid from 'mermaid';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 export default function Slide() {
   const markdown = `- Four canonical coordination topologies: centralized conductor, blackboard, marketplace, and event bus
@@ -50,7 +52,8 @@ for task in dag.ready():
 - Use versioned artifacts, TTLs, and critics that watch the board
 - Great for discovery-heavy or mixed-modality workflows
 
-\`\`\`mermaid flowchart TD
+\`\`\`mermaid
+flowchart TD
   subgraph BB[Blackboard]
     X[Artifact X v1..n]
     Y[Hypotheses/Tasks]
@@ -197,12 +200,21 @@ def handle(evt):
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{
-          code({node, className, children, ...props}: any) {
+          code({node, inline, className, children, ...props}: any) {
             const match = /language-(w+)/.exec(className || '');
             const language = match ? match[1] : '';
-            const isInline = !className;
             
-            if (!isInline && language === 'mermaid') {
+            // Handle inline code
+            if (inline) {
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            }
+            
+            // Handle mermaid diagrams
+            if (language === 'mermaid') {
               return (
                 <pre className="language-mermaid">
                   <code>{String(children).replace(/\n$/, '')}</code>
@@ -210,10 +222,28 @@ def handle(evt):
               );
             }
             
+            // Handle code blocks with syntax highlighting
+            if (language) {
+              return (
+                <SyntaxHighlighter
+                  language={language}
+                  style={atomDark}
+                  showLineNumbers={true}
+                  PreTag="div"
+                  {...props}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              );
+            }
+            
+            // Default code block without highlighting
             return (
-              <code className={className} {...props}>
-                {children}
-              </code>
+              <pre>
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              </pre>
             );
           }
         }}
