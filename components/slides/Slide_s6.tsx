@@ -243,7 +243,7 @@ flowchart TD
   
   return (
     <div className="slide markdown-slide">
-      <h1>Live build from first principles: agent contracts, tool adapters, planner skeleton, orchestrator loop — DAG Diagram</h1>
+      <h1>Live build from first principles: agent contracts, tool adapters, planner skeleton, orchestrator loop</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

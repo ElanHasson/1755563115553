@@ -233,7 +233,7 @@ flowchart LR
   
   return (
     <div className="slide markdown-slide">
-      <h1>Control patterns that work: Planner→Executor→Critic, Debate, Router/Specialist, Constitutional Guardrails — Pattern Diagram</h1>
+      <h1>Control patterns that work: Planner→Executor→Critic, Debate, Router/Specialist, Constitutional Guardrails</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

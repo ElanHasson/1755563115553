@@ -248,7 +248,7 @@ pie title Validation failure taxonomy (last 7 days)
   
   return (
     <div className="slide markdown-slide">
-      <h1>Taming non‑determinism: schemas, sampling discipline, validation layers, repair loops — Quality Control Diagram</h1>
+      <h1>Taming non‑determinism: schemas, sampling discipline, validation layers, repair loops</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

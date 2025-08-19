@@ -241,7 +241,7 @@ flowchart TD
   
   return (
     <div className="slide markdown-slide">
-      <h1>Memory, governance, and safety by construction: state, PII, sandboxing, prompt‑injection defenses — Governance Diagrams</h1>
+      <h1>Memory, governance, and safety by construction: state, PII, sandboxing, prompt‑injection defenses</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

@@ -146,7 +146,7 @@ def execute_task(agent, validators: List, task: AgentInput) -> AgentOutput:
   
   return (
     <div className="slide markdown-slide">
-      <h1>What multi‑agent orchestration really means: Agents, Tools, Orchestrators, Choreo vs Orchestration — Diagrams A/B/E</h1>
+      <h1>What multi‑agent orchestration really means: Agents, Tools, Orchestrators, Choreo vs Orchestration</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

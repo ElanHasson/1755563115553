@@ -164,7 +164,7 @@ if window.qoQ_drop("success_rate") > 2.0 or window.latency_p95_ms > SLO:
   
   return (
     <div className="slide markdown-slide">
-      <h1>Operate like an engineer: evaluation, metrics, tracing, regression and canaries — Ops Diagram</h1>
+      <h1>Operate like an engineer: evaluation, metrics, tracing, regression and canaries</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{

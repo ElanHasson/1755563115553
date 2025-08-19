@@ -183,7 +183,7 @@ def handle(evt):
   
   return (
     <div className="slide markdown-slide">
-      <h1>Coordination topologies at a glance: Conductor, Blackboard, Marketplace, Event Bus — Diagrams 1–4</h1>
+      <h1>Coordination topologies at a glance: Conductor, Blackboard, Marketplace, Event Bus</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{
