@@ -16,18 +16,14 @@ export default function Presentation() {
   const [showNarration, setShowNarration] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
   
-  // Play audio when slide changes
+  // Load audio when slide changes
   useEffect(() => {
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = `/audio/slide-${presentationData.slides[currentSlide].id}.mp3`;
       
-      // Check if audio file exists and play if it does
+      // Just load, don't auto-play
       audioRef.current.load();
-      audioRef.current.play().catch(err => {
-        // Audio file might not exist or be empty
-        console.log('No audio for this slide');
-      });
     }
   }, [currentSlide]);
   
@@ -39,7 +35,7 @@ export default function Presentation() {
         setCurrentSlide(currentSlide - 1);
       } else if (e.key === ' ') {
         e.preventDefault();
-        setIsPlaying(!isPlaying);
+        setIsPlaying(prev => !prev);
       } else if (e.key === 'n' || e.key === 'N') {
         e.preventDefault();
         setShowSpeakerNotes(!showSpeakerNotes);
@@ -53,14 +49,16 @@ export default function Presentation() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [currentSlide, isPlaying, showSpeakerNotes, showNarration]);
   
-  // Auto-advance slides when playing or when audio ends
+  // Auto-advance slides when audio ends
   useEffect(() => {
     if (audioRef.current) {
       const handleAudioEnd = () => {
-        if (currentSlide < slideComponents.length - 1) {
-          setCurrentSlide(currentSlide + 1);
-        } else {
-          setIsPlaying(false);
+        if (isPlaying) {
+          if (currentSlide < slideComponents.length - 1) {
+            setCurrentSlide(currentSlide + 1);
+          } else {
+            setIsPlaying(false);
+          }
         }
       };
       
@@ -69,20 +67,25 @@ export default function Presentation() {
         audioRef.current?.removeEventListener('ended', handleAudioEnd);
       };
     }
-  }, [currentSlide]);
+  }, [currentSlide, isPlaying]);
   
+  // Handle play/pause
   useEffect(() => {
-    if (isPlaying && currentSlide < slideComponents.length - 1) {
-      // Use audio duration if available, otherwise use slide duration
-      const timer = setTimeout(() => {
-        if (!audioRef.current || audioRef.current.paused || audioRef.current.ended) {
-          setCurrentSlide(currentSlide + 1);
-        }
-      }, presentationData.slides[currentSlide].duration * 1000);
-      
-      return () => clearTimeout(timer);
-    } else if (isPlaying && currentSlide === slideComponents.length - 1) {
-      setIsPlaying(false);
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.play().catch(err => {
+          console.log('No audio for this slide');
+          // If no audio, use timer-based advancement
+          if (currentSlide < slideComponents.length - 1) {
+            const timer = setTimeout(() => {
+              setCurrentSlide(currentSlide + 1);
+            }, presentationData.slides[currentSlide].duration * 1000);
+            return () => clearTimeout(timer);
+          }
+        });
+      } else {
+        audioRef.current.pause();
+      }
     }
   }, [isPlaying, currentSlide]);
   

@@ -115,7 +115,7 @@ def governed_run(task, agent, tools, budget):
   
   return (
     <div className="slide markdown-slide">
-      <h1>Why Orchestration? We don’t build agents—we build societies (philosophical frame)</h1>
+      <h1>Why Orchestration? We don’t build agents—we build societies</h1>
       <ReactMarkdown 
         remarkPlugins={[remarkGfm]}
         components={{
