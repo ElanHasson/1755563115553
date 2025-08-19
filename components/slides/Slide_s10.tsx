@@ -16,8 +16,8 @@ flowchart TD
     T --> O[Offline Replay / Evals]
     O --> M[Metrics\n(success, FPY, p50/p95, cost, validator fail)]
     M --> G[Regression Gate\n(compare vs goldens & SLOs)]
-    G -- pass --> C[Canary Rollout]
-    G -- fail --> RB[Rollback]
+    G -->|pass| C[Canary Rollout]
+    G -->|fail| RB[Rollback]
     C --> FR[Full Release]
     C -->|degrade| RB
     RB --> R

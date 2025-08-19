@@ -45,14 +45,14 @@ flowchart LR
 \`\`\`mermaid
 flowchart LR
   O[Agent Output] --> S[Schema Validation]
-  S -- ok --> B[Business Rules]
-  S -- fail --> R1[Repair/Refuse]
-  B -- ok --> P[Policy/Safety]
-  B -- fail --> R2[Repair/Refine]
-  P -- ok --> H{Human?}
-  P -- fail --> R3[Repair/Refuse]
-  H -- approve --> D[Done]
-  H -- request changes --> R4[Revise]
+  S -->|ok| B[Business Rules]
+  S -->|fail| R1[Repair/Refuse]
+  B -->|ok| P[Policy/Safety]
+  B -->|fail| R2[Repair/Refine]
+  P -->|ok| H{Human?}
+  P -->|fail| R3[Repair/Refuse]
+  H -->|approve| D[Done]
+  H -->|request changes| R4[Revise]
   %% Diagram E — Validation Layers
 \`\`\`
 

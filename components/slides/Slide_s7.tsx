@@ -117,12 +117,12 @@ def run_step(phase, prompt, schema=None):
 \`\`\`mermaid
 flowchart TD
   O[Agent Output] --> S[Schema Validator]
-  S -- ok --> B[Business Rules]
-  S -- fail --> RP[Repair]
-  B -- ok --> P[Policy & Safety]
-  B -- fail --> RP
-  P -- ok --> AC[Accept]
-  P -- fail --> RJ[Reject or Human]
+  S -->|ok| B[Business Rules]
+  S -->|fail| RP[Repair]
+  B -->|ok| P[Policy & Safety]
+  B -->|fail| RP
+  P -->|ok| AC[Accept]
+  P -->|fail| RJ[Reject or Human]
   RP --> O
 \`\`\`
 

@@ -46,17 +46,17 @@ def should_stop(iter_i, last, curr, max_iter=8, sim_thr=0.97):
 \`\`\`mermaid
 flowchart TD
   A[Task start] --> B{Exceeded limits?}
-  B -- yes --> X[Stop & escalate]
-  B -- no --> C[Execute agent]
+  B -->|yes| X[Stop & escalate]
+  B -->|no| C[Execute agent]
   C --> D[Validate: schema + rules + policy]
-  D -- fail --> E[Repair or backoff]
+  D -->|fail| E[Repair or backoff]
   E --> F{Loop guard}
-  F -- trip --> X
-  F -- safe --> B
-  D -- pass --> G[Commit artifact]
+  F -->|trip| X
+  F -->|safe| B
+  D -->|pass| G[Commit artifact]
   G --> H{All goals met?}
-  H -- yes --> Y[Finish]
-  H -- no --> B
+  H -->|yes| Y[Finish]
+  H -->|no| B
 \`\`\`
 
 - Philosophical pointer
