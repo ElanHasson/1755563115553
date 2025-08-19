@@ -10,14 +10,12 @@ export default function Slide() {
 - Govern state explicitly: what can be remembered, for how long, and by whom.
 - Make PII flows visible and enforceable at write-time, not after an incident.
 - Sandboxing and prompt-injection defenses are architectural patterns, not bolt-on filters.
-
 ---
 
 ### State and Memory Boundaries (safety by construction)
 - Treat state as a first-class resource: run-state, blackboard, long-term memory.
 - Apply TTLs, summarization with provenance, and access policies per agent.
 - Separate system, user, and retrieved context; sign what must not change.
-
 \`\`\`mermaid
 flowchart LR
   U[User Goal] --> O[Orchestrator]
@@ -31,7 +29,6 @@ flowchart LR
   C[Critic/Policy] --> BB
   O --> Trace[(Trace & Budgets)]
 \`\`\`
-
 \`\`\`json
 // Example: memory slice contract surfaced to an agent
 {
@@ -43,14 +40,12 @@ flowchart LR
   }
 }
 \`\`\`
-
 ---
 
 ### PII Governance: lifecycle and redaction
 - Classify and redact at ingestion; store only what policy allows.
 - Tag artifacts with sensitivity, retention, and lineage.
 - Audit every read/write; default deny for cross-domain access.
-
 \`\`\`mermaid
 sequenceDiagram
   participant U as User/Input
@@ -66,7 +61,6 @@ sequenceDiagram
   R-->>E: write redacted + hashes + provenance
   RM-->>E: enforce TTL/holds
 \`\`\`
-
 \`\`\`python
 # Python: write-time PII scrubber with provenance
 PII_PATTERNS = {
@@ -88,14 +82,12 @@ def scrub(record, policy, source):
         "retention": policy["retention"],
     }
 \`\`\`
-
 ---
 
 ### Sandboxing and Least Privilege for Tools
 - Per-run credentials; scope networks, files, and side effects.
 - Deny-by-default egress; allowlist domains and methods.
 - Time, memory, and rate limits per tool call.
-
 \`\`\`mermaid
 graph LR
   A[Agent] --> TP[Tool Proxy]
@@ -105,7 +97,6 @@ graph LR
   Vault[(Secrets Vault)] --> TP
   Logs[(Audit/Trace)] --> PE
 \`\`\`
-
 \`\`\`yaml
 # Tool sandbox policy (YAML)
 version: 1
@@ -121,14 +112,12 @@ tools:
     network: {egress_allow: ["https://internal.api"]}
     scopes: ["customer:read", "customer:write:masked"]
 \`\`\`
-
 ---
 
 ### Prompt-Injection Defenses: layered and explicit
 - Segment system, user, and retrieved text; never merge blindly.
 - Require justification tied to signed context IDs before risky actions.
 - Validate intents; refuse attempts to alter policy or jailbreak.
-
 \`\`\`mermaid
 sequenceDiagram
   participant U as User
@@ -148,7 +137,6 @@ sequenceDiagram
     G-->>Tool: execute
   end
 \`\`\`
-
 \`\`\`python
 # Tool gating with justification & signature checks
 @dataclass
@@ -170,14 +158,12 @@ def guard(proposal: ToolProposal, context_index, policy) -> bool:
             return False
     return risk_score(proposal) <= policy.max_risk
 \`\`\`
-
 ---
 
 ### Governance Diagram: control plane around non-determinism
 - Contracts + schemas limit behavior; critics and rules verify.
 - Budgets, traces, and audits make emergence observable and steerable.
 - Human-in-the-loop for high-risk branches.
-
 \`\`\`mermaid
 flowchart TD
   Plan[Planner/DAG] --> Exec[Executors]
@@ -194,7 +180,6 @@ flowchart TD
   Exec -.-> Tr
   Critic -.-> HR
 \`\`\`
-
 \`\`\`json
 // Structured output contract with tool-call ledger
 {
@@ -261,7 +246,7 @@ flowchart TD
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

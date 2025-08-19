@@ -12,7 +12,6 @@ export default function Slide() {
 - Separate powers: plan, act, judge — different agents, different incentives
 - Make emergence safe: allow creativity inside boundaries
 - Observable by design: traces, schemas, budgets on every step
-
 \`\`\`mermaid
 
 flowchart LR
@@ -30,7 +29,6 @@ flowchart LR
   C -->|fix| P
   G -->|enforce/repair| C
 \`\`\`
-
 ---
 
 ### 1) Planner → Executor → Critic (PEC)
@@ -38,7 +36,6 @@ flowchart LR
 - Decompose to a DAG, execute in parallel, validate, repair, converge
 - Contracts keep outputs typed; critics keep quality/policy in check
 - Use when tasks have dependencies and acceptance criteria
-
 \`\`\`mermaid
 flowchart TD
   A[Goal] --> B[Planner -> Tasks DAG]
@@ -49,7 +46,6 @@ flowchart TD
   F -->|accept| G[Assemble]
   F -->|repair| B
 \`\`\`
-
 \`\`\`python
 # PEC skeleton (framework-agnostic)
 plan = planner.decompose(goal)
@@ -69,7 +65,6 @@ while plan.has_ready() and state["attempts"] < MAX_ITERS:
 
 result = assembler.assemble(plan, state["artifacts"]) 
 \`\`\`
-
 ---
 
 ### 2) Debate / Deliberation
@@ -77,7 +72,6 @@ result = assembler.assemble(plan, state["artifacts"])
 - Multiple agents propose, critique, and refine
 - Judge aggregates with rubric; optional self-play cross-exam
 - Use when solution space is open-ended or adversarial
-
 \`\`\`mermaid
 sequenceDiagram
   participant U as User/Spec
@@ -94,7 +88,6 @@ sequenceDiagram
   J-->>J: Score with rubric (groundedness, cost, risk)
   J-->>U: Chosen plan + rationale
 \`\`\`
-
 \`\`\`python
 rubric = {
   "criteria": [
@@ -108,7 +101,6 @@ cross = cross_exam(proposals)
 judgment = judge.score(proposals, cross, rubric)
 selected = max(judgment, key=lambda j: j["score"])  # returns proposal + rationale
 \`\`\`
-
 ---
 
 ### 3) Router / Specialist
@@ -116,7 +108,6 @@ selected = max(judgment, key=lambda j: j["score"])  # returns proposal + rationa
 - Classify intent; dispatch to the best specialist (small model first)
 - Improves cost/latency; isolates prompts by domain
 - Add backpressure: quotas and concurrency per lane
-
 \`\`\`mermaid
 flowchart LR
   In[Incoming Task] --> RT{Router: intent + risk}
@@ -126,7 +117,6 @@ flowchart LR
   B & T & L --> C[Critic/Policy]
   C --> Out[Resolution]
 \`\`\`
-
 \`\`\`python
 def route(task):
     label = tiny_model.classify(task.text, labels=["billing","tech","legal","other"])
@@ -142,7 +132,6 @@ agent, meta = route(task)
 out = agent.run(task)
 verdict = critic.evaluate(out, policy=min("strict", meta["risk"]))
 \`\`\`
-
 ---
 
 ### 4) Constitutional Guardrails
@@ -150,14 +139,12 @@ verdict = critic.evaluate(out, policy=min("strict", meta["risk"]))
 - Rules-as-code: constrain outputs, tools, and data flows
 - Automate refusals and repairs before results escape the sandbox
 - Treat as a judiciary distinct from critics of quality
-
 \`\`\`mermaid
 flowchart TD
   X[Agent Output/Action] --> Y[Rule Engine]
   Y -->|violation| R[Repair prompt or refuse]
   Y -->|compliant| Z[Pass to Critic/Judge]
 \`\`\`
-
 \`\`\`yaml
 # guardrails.yml
 rules:
@@ -170,7 +157,6 @@ rules:
     action: block
     severity: critical
 \`\`\`
-
 \`\`\`python
 def apply_guardrails(event, rules):
     for rule in rules:
@@ -181,7 +167,6 @@ def apply_guardrails(event, rules):
                 event["output"] = redact(event["output"]) 
     return {"ok": True, "event": event}
 \`\`\`
-
 ---
 
 ### Composition: Pattern Diagram
@@ -189,7 +174,6 @@ def apply_guardrails(event, rules):
 - Start with PEC for structure; add Router for specialization
 - Add Debate where uncertainty is high; enforce Guardrails everywhere
 - Measure: first-pass yield, rounds to completion, cost/latency, violation rate
-
 \`\`\`mermaid
 flowchart LR
   U[User Goal] --> RT{Router}
@@ -254,7 +238,7 @@ flowchart LR
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

@@ -10,14 +10,12 @@ export default function Slide() {
   - Define success, non‑negotiables, and accountability first
   - Contracts: agent I/O schemas, tool scopes, budgets, validators
   - Governance beats knobs: iterate the rules, then swap frameworks
-
 - **Concrete next steps (7‑day sprint)**
   - Day 1: Write the constitution (goals, hard no’s, guardrails)
   - Day 2: Sketch a simple DAG; pick centralized orchestrator to start
   - Day 3: Implement Planner + Critic first; keep agent contracts tiny
   - Day 4–5: Add tracing, golden tests, policy validators
   - Day 6–7: Canary a pilot; set kill switch; measure p50/p95, FPY
-
 \`\`\`json
 {
   "success": {"acceptance": "goldens pass", "sla_ms": 8000},
@@ -35,7 +33,6 @@ export default function Slide() {
   "observability": {"trace": true, "redaction": "PII", "run_id": "uuid"}
 }
 \`\`\`
-
 \`\`\`mermaid
 flowchart LR
   C[Constitution\n(contracts, policies, evals)] --> O[Orchestrator/DAG]
@@ -46,7 +43,6 @@ flowchart LR
   V -->|accept/fix| O
   O --> R[Result + Trace]
 \`\`\`
-
 \`\`\`mermaid
 gantt
   title Week-1 Implementation Plan
@@ -60,7 +56,6 @@ gantt
   section Operate
   Canary + Kill Switch       :a5, 5, 2
 \`\`\`
-
 - **Resources to keep you honest**
   - Patterns: planner–executor, critique–refine, router–specialist, blackboard
   - Eval: goldens, LLM-as-judge + deterministic checks, offline replay
@@ -117,7 +112,7 @@ gantt
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

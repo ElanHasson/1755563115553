@@ -10,14 +10,12 @@ export default function Slide() {
 - From goal -> plan (DAG) -> execute with tools -> verify -> converge
 - We'll live-build 4 primitives: agent contract, tool adapter, planner skeleton, orchestrator loop
 - Philosophy: choose norms and let emergence happen inside guardrails
-
 ---
 
 ## Agent contract (small, strict)
 - Inputs: context, allowed tools, budget/timeouts, memory slice
 - Outputs: structured_result, tool_calls, next_actions, metrics
 - Determinism via JSON schema + validator
-
 \`\`\`json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -53,7 +51,6 @@ export default function Slide() {
   "additionalProperties": false
 }
 \`\`\`
-
 \`\`\`python
 # minimal, framework-agnostic agent runner
 from jsonschema import validate, ValidationError
@@ -67,14 +64,12 @@ def run_agent(input_ctx, model, schema, system_prompt):
         return {"ok": False, "error": f"schema_error: {e.message}", "raw": raw}
     return {"ok": True, "value": raw}
 \`\`\`
-
 ---
 
 ## Tool adapter (typed, sandboxed)
 - Name/version, JSON args, typed return
 - Side-effect policy: read-only vs write; idempotency_key
 - Retries with backoff, timeouts, quotas
-
 \`\`\`python
 from pydantic import BaseModel, Field
 import time
@@ -106,13 +101,11 @@ def search_web(args: SearchArgs) -> SearchResult:
 
 SEARCH_TOOL = Tool("search_web", "1.0.0", search_web, read_only=True)
 \`\`\`
-
 ---
 
 ## Planner skeleton (decompose -> DAG)
 - Returns tasks and dependencies
 - Keep it explicit and auditable
-
 \`\`\`python
 def plan(goal: str, constraints: dict):
     tasks = [
@@ -124,14 +117,12 @@ def plan(goal: str, constraints: dict):
     deps = [("A", "C"), ("B", "C"), ("C", "D")]  # edges: from -> to
     return {"tasks": tasks, "deps": deps}
 \`\`\`
-
 ---
 
 ## Orchestrator loop (centralized)
 - Ready set = tasks with deps satisfied
 - Parallelize independent tasks
 - Validate, update DAG, handle failures
-
 \`\`\`python
 from concurrent.futures import ThreadPoolExecutor
 
@@ -148,11 +139,9 @@ def orchestrate(goal, model):
 
 # helper stubs: ready, run_task, all_completed, assemble
 \`\`\`
-
 ---
 
 ## DAG: planner -> executors -> critic
-
 \`\`\`mermaid
 graph LR
   A[Research] --> C[Draft]
@@ -161,11 +150,9 @@ graph LR
   D -->|accept| E[Done]
   D -.->|fix| C
 \`\`\`
-
 ---
 
 ## Execution sequence (one task)
-
 \`\`\`mermaid
 sequenceDiagram
   participant U as User Goal
@@ -186,13 +173,11 @@ sequenceDiagram
   C-->>O: accept/fix
   O-->>U: artifact or iteration
 \`\`\`
-
 ---
 
 ## Flow control with quality gates
 - Schema -> business rules -> policy -> accept/repair
 - Circuit breakers, retries, max-iterations
-
 \`\`\`mermaid
 flowchart TD
   S[Start] --> R[Ready tasks]
@@ -205,7 +190,6 @@ flowchart TD
   D -->|yes| F[Finish]
   D -->|no| R
 \`\`\`
-
 ---
 
 ## Minimal live test outline
@@ -264,7 +248,7 @@ flowchart TD
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

@@ -15,7 +15,6 @@ export default function Slide() {
 - When to prefer each:
   - **Orchestration**: strong SLAs, compliance, tight budgets, observability.
   - **Choreography**: scalability, resilience, local autonomy, loose coupling.
-
 \`\`\`mermaid
 flowchart LR
   subgraph SB["Diagram A — Contracts and Flows (System Boundary)"]
@@ -25,11 +24,9 @@ flowchart LR
     ORCH --> MEM[(Shared Memory/Blackboard)]
   end
 \`\`\`
-
 - Orchestration lives or dies by contracts:
   - Keep agent I/O small and strict (JSON schemas, typed tools, budgets).
   - Separate creative vs. precise phases; allow emergence within boundaries.
-
 \`\`\`mermaid
 flowchart LR
   C[Context] --> A[Agent]
@@ -40,10 +37,8 @@ flowchart LR
   A --> NA[Next Actions]
   %% Diagram B — Agent I/O
 \`\`\`
-
 - Validation is not an afterthought; it's the spine.
   - Layer checks: schema → business rules → policy → optional human.
-
 \`\`\`mermaid
 flowchart LR
   O[Agent Output] --> S[Schema Validation]
@@ -57,9 +52,7 @@ flowchart LR
   H -->|request changes| R4[Revise]
   %% Diagram E — Validation Layers
 \`\`\`
-
 - Minimal, buildable contracts (Python-ish):
-
 \`\`\`python
 from typing import Any, Dict, List, Optional
 from pydantic import BaseModel, Field, ValidationError
@@ -102,13 +95,11 @@ def execute_task(agent, validators: List, task: AgentInput) -> AgentOutput:
             break
     return out
 \`\`\`
-
 - Practical takeaways:
   - Start centralized; upgrade to blackboard/choreography when scale demands.
   - Version everything: prompts, tools, models, policies.
   - Treat traces as first-class: every step, tool, cost, and decision is a node on your graph.
-  - Make quality gates explicit; never rely on regex-only parsing for critical paths.
-`;
+  - Make quality gates explicit; never rely on regex-only parsing for critical paths.`;
   const mermaidRef = useRef(0);
   
   useEffect(() => {
@@ -160,7 +151,7 @@ def execute_task(agent, validators: List, task: AgentInput) -> AgentOutput:
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

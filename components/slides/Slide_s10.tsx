@@ -14,17 +14,16 @@ export default function Slide() {
 \`\`\`mermaid
 flowchart TD
     U[User Goal / Task] --> R[Run Orchestration]
-    R --> T[Trace Spans\n(prompts, tools, costs, latencies)]
+    R --> T["Trace Spans\n(prompts, tools, costs, latencies)"]
     T --> O[Offline Replay / Evals]
     O --> M[Metrics\n(success, FPY, p50/p95, cost, validator fail)]
-    M --> G[Regression Gate\n(compare vs goldens & SLOs)]
+    M --> G["Regression Gate\n(compare vs goldens & SLOs)""]
     G -->|pass| C[Canary Rollout]
     G -->|fail| RB[Rollback]
     C --> FR[Full Release]
     C -->|degrade| RB
     RB --> R
 \`\`\`
-
 ### Minimal tracing (OpenTelemetry-style)
 \`\`\`python
 from contextlib import contextmanager
@@ -52,13 +51,11 @@ with span("agent.run", {"model": "gpt-4o", "run_id": run_id}):
     out = model.generate(prompt, response_format=schema)
     validate(out)
 \`\`\`
-
 ### Metrics you can act on
 - Task success rate, first-pass yield, rounds-to-done
 - Latency p50/p95, cost per task, tool success rate
 - Validator failure rate, groundedness/citation coverage
 - Drift: content change, embedding shift, prompt injection hits
-
 \`\`\`mermaid
 classDiagram
 class Effectiveness {
@@ -84,7 +81,6 @@ Reliability <|-- Metrics
 Drift <|-- Metrics
 class Metrics
 \`\`\`
-
 ### Canary and rollback (sequence)
 \`\`\`mermaid
 sequenceDiagram
@@ -101,7 +97,6 @@ sequenceDiagram
   Judge-->>Gate: scores (quality, latency, cost)
   Gate-->>Router: adjust split / rollback if thresholds violated
 \`\`\`
-
 ### Regression + canary guard (offline + online)
 \`\`\`python
 # Offline: replay traces against new model and compare to goldens
@@ -117,7 +112,6 @@ if window.qoQ_drop("success_rate") > 2.0 or window.latency_p95_ms > SLO:
     rollback(version="gpt-4o.2025-08")
     page_oncall("quality regression detected")
 \`\`\`
-
 ### Micro-checklist
 - Version everything: prompts, models, tools, policies
 - Trace every step; redact at write-time; link to run_id
@@ -175,7 +169,7 @@ if window.qoQ_drop("success_rate") > 2.0 or window.latency_p95_ms > SLO:
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

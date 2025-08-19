@@ -9,7 +9,6 @@ export default function Slide() {
   const markdown = `- Four canonical coordination topologies: centralized conductor, blackboard, marketplace, and event bus
 - Think of these as institutional designs: who decides, how memory flows, how quality is governed
 - You can combine them; start simple, evolve as complexity and scale grow
-
 ---
 
 ## Conductor (centralized orchestrator)
@@ -17,7 +16,6 @@ export default function Slide() {
 - Great for 101 builds, regulated flows, and strict SLAs
 - Risks: bottleneck, single point of failure, coordinator fatigue
 - Add critics/validators as first-class steps
-
 \`\`\`mermaid
 flowchart LR
   U[User Goal] --> O[Orchestrator]
@@ -31,7 +29,6 @@ flowchart LR
   C --> O
   O --> R[Result]
 \`\`\`
-
 \`\`\`python
 # Orchestrator sketch
 for task in dag.ready():
@@ -43,7 +40,6 @@ for task in dag.ready():
     else:
         dag.repair_or_retry(task, policy="backoff:3, escalate:critic")
 \`\`\`
-
 ---
 
 ## Blackboard (shared memory)
@@ -51,7 +47,6 @@ for task in dag.ready():
 - Convergence is a design problem: norms, locks, and merge rules
 - Use versioned artifacts, TTLs, and critics that watch the board
 - Great for discovery-heavy or mixed-modality workflows
-
 \`\`\`mermaid
 flowchart TD
   subgraph BB[Blackboard]
@@ -66,7 +61,6 @@ flowchart TD
   Crit[Critic] -->|monitors| BB
   Crit -->|accept/fix flags| BB
 \`\`\`
-
 \`\`\`python
 # Blackboard IO
 aid = agent_id()
@@ -77,7 +71,6 @@ with lock("outline"):
 critique = critic.evaluate("outline", rules=[coherence, coverage])
 annotate("outline", critique)
 \`\`\`
-
 ---
 
 ## Marketplace (contract net)
@@ -85,7 +78,6 @@ annotate("outline", critique)
 - Useful when agent skills/costs vary or resources are elastic
 - Needs auction design: bidding schema, deadlines, tie-breakers
 - Overhead is real; reserve for non-trivial tasks or scarce tools
-
 \`\`\`mermaid
 sequenceDiagram
   participant P as Planner/Buyer
@@ -100,7 +92,6 @@ sequenceDiagram
   P->>B: contract(task)
   B-->>P: deliver(artifact, metrics)
 \`\`\`
-
 \`\`\`python
 # Contract-net core
 rfq = make_rfq(task, budget=5.00, sla="2m")
@@ -109,7 +100,6 @@ win = argmin(bids, key=lambda b: (b.risk, b.cost, b.eta))
 result = execute(win.agent, task)
 assert validate(result)
 \`\`\`
-
 ---
 
 ## Event Bus (event-driven choreography)
@@ -117,7 +107,6 @@ assert validate(result)
 - Harder to reason about global guarantees; use idempotency and tracing
 - Great for cross-team integrations and long-lived processes
 - Add a saga/compensation story for partial failures
-
 \`\`\`mermaid
 flowchart TD
   subgraph Bus[Event Bus / Topics]
@@ -130,7 +119,6 @@ flowchart TD
   B <-->|subscribe: task.created| Bus
   C <-->|subscribe: artifact.ready, task.created| Bus
 \`\`\`
-
 \`\`\`python
 # Subscriber with idempotency
 @subscribe(topic="artifact.ready")
@@ -141,7 +129,6 @@ def handle(evt):
         publish("policy.flag" if out.risky else "step.done", out)
         mark_seen(evt.id)
 \`\`\`
-
 ---
 
 ## Choosing quickly
@@ -201,7 +188,7 @@ def handle(evt):
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

@@ -11,19 +11,16 @@ export default function Slide() {
   - Medium: guardrails + critics + canaries; ship within budgets
   - High: explore emergence; recover with monitors and rollbacks
   - Vote in the poll panel; we’ll tailor the Q&A based on results
-
 \`\`\`mermaid
 pie title Risk appetite (sample)
   "Low" : 40
   "Medium" : 45
   "High" : 15
 \`\`\`
-
 - Lightning Q&A themes (fast takes)
   - Traps: prompt injection, ungrounded claims, hidden coupling
   - Budgets: tokens, tool calls, wall-clock; per-agent caps
   - Loops: step limits, heartbeats, similarity checks, circuit breakers
-
 - Budget governor (first principles)
 \`\`\`python
 class Budget:
@@ -35,7 +32,6 @@ class Budget:
         if tool and self.tools - 1 < 0: return False, "tools"
         self.tokens -= cost_tokens; self.tools -= int(tool); return True, None
 \`\`\`
-
 - Loop guard (stop the spin)
 \`\`\`python
 def should_stop(iter_i, last, curr, max_iter=8, sim_thr=0.97):
@@ -44,7 +40,6 @@ def should_stop(iter_i, last, curr, max_iter=8, sim_thr=0.97):
     if cosine_sim(emb(last), emb(curr)) > sim_thr: return True, "stagnation"
     return False, None
 \`\`\`
-
 \`\`\`mermaid
 flowchart TD
   A[Task start] --> B{Exceeded limits?}
@@ -60,7 +55,6 @@ flowchart TD
   H -->|yes| Y[Finish]
   H -->|no| B
 \`\`\`
-
 - Philosophical pointer
   - We don’t eliminate uncertainty; we circumscribe it with contracts, critics, and budgets
   - Your constitution > your framework; frameworks just make the constitution executable`;
@@ -115,7 +109,7 @@ flowchart TD
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

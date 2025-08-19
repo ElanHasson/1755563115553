@@ -11,7 +11,6 @@ export default function Slide() {
 - Topologies: Conductor, Blackboard, Marketplace — pick for control vs emergence.
 - Governance turns uncertainty into reliability: schemas, policies, traces.
 - Start centralized; evolve as needed. Your constitution matters more than your framework.
-
 \`\`\`mermaid
 flowchart LR
   User[User Goal]
@@ -40,7 +39,6 @@ flowchart LR
   Critic --> Orch
   Critic --> Result
 \`\`\`
-
 \`\`\`mermaid
 classDiagram
   class Orchestrator {+plan() +assign() +verify()}
@@ -56,7 +54,6 @@ classDiagram
   Critic --> Agent : feedback
   Orchestrator --> Memory : traces
 \`\`\`
-
 \`\`\`python
 # Governance wrapper: emergence within boundaries
 def governed_run(task, agent, tools, budget):
@@ -69,8 +66,7 @@ def governed_run(task, agent, tools, budget):
         raise BudgetExceeded()
     trace_log(task, out, tools=tools, metrics=out.metrics)
     return out
-\`\`\`
-`;
+\`\`\``;
   const mermaidRef = useRef(0);
   
   useEffect(() => {
@@ -122,7 +118,7 @@ def governed_run(task, agent, tools, budget):
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

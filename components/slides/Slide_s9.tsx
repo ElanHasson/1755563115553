@@ -12,7 +12,6 @@ export default function Slide() {
 - Deterministic quality gates: schema + citation validator
 - Full trace: spans, tool calls, tokens, latency, verdicts
 - Philosophy: we don’t remove uncertainty; we bound it with governance
-
 \`\`\`json
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -42,7 +41,6 @@ export default function Slide() {
   }
 }
 \`\`\`
-
 ## System at a glance (conductor topology)
 \`\`\`mermaid
 flowchart TD
@@ -55,19 +53,17 @@ flowchart TD
   C -->|accept| F[Final Report]
   C -->|repair| R
   subgraph Observability
-    X[Trace Collector]\n(spans, costs, latencies)
+    X["Trace Collector]\n(spans, costs, latencies)"]
   end
   R -.-> X
   D -.-> X
   C -.-> X
   T -. provenance .-> D
 \`\`\`
-
 ## Agent contracts + tools (framework-agnostic)
 - Small, strict interfaces; least-privilege tools
 - Separate creative vs precise steps via temperatures
 - Deterministic validators before/after model calls
-
 \`\`\`python
 AgentInput = TypedDict("AgentInput", {
   "task": str, "constraints": dict, "tools": list, "memory": dict,
@@ -91,12 +87,10 @@ def citation_check(draft: dict, evidence: dict) -> tuple[bool, str]:
             if cid not in evidence: return (False, f"Missing citation: {cid}")
     return (True, "ok")
 \`\`\`
-
 ## Orchestrator loop + quality gates
 - Plan -> assign -> execute -> verify -> repair-or-accept
 - Parallelize independents; enforce budgets; circuit breakers
 - Log every span with inputs/outputs (redacted), tokens, costs
-
 \`\`\`python
 DAG = plan(goal)
 state = init_state(DAG)
@@ -113,7 +107,6 @@ while ready := next_ready(DAG, state):
         if exceeded_limits(state): break
 final = assemble(state)
 \`\`\`
-
 \`\`\`mermaid
 flowchart LR
   A[Agent Output] --> S[Schema Validator]
@@ -124,11 +117,9 @@ flowchart LR
   J -->|accept| Done[Publish]
   J -->|request fix| Fix3[Repair Loop]
 \`\`\`
-
 ## End-to-end trace (demo view)
 - Spans capture dependencies, tools, verdicts
 - Enables replay, regression, and cost/latency analysis
-
 \`\`\`mermaid
 sequenceDiagram
   participant U as User
@@ -148,7 +139,6 @@ sequenceDiagram
   D-->>C: revised draft
   C-->>P: accept
 \`\`\`
-
 \`\`\`json
 [
   {"id":"1","name":"plan","dur_ms":120,"tokens":420},
@@ -216,7 +206,7 @@ sequenceDiagram
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code

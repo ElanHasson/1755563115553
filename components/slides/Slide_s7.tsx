@@ -11,23 +11,20 @@ export default function Slide() {
 - Govern with schemas, sampling discipline, validation layers, and repair loops.
 - Separate creative phases from precise phases to reduce chaos where it hurts.
 - Trace everything: runs, tools, costs, and decisions become your debugger.
-
 \`\`\`mermaid
 flowchart LR
   U[User Goal] --> O[Orchestrator]
-  O --> A[Agent(s)]
+  O --> A["Agent(s)"]
   A -->|Outputs| V[Validators]
   V -->|Pass| R[Result]
   V -->|Fail| F[Repair Loop]
   F --> A
 \`\`\`
-
 **Schemas and contracts (make uncertainty legible)**
 - Use strict JSON Schema or function-calling for outputs.
 - Deny unknown fields; enforce enums and patterns.
 - Version schemas; pin model versions per schema.
 - Fail fast on schema errors; never silently coerce.
-
 \`\`\`ts
 // TypeScript: strict agent output schema using AJV
 import Ajv from "ajv";
@@ -84,13 +81,11 @@ export function check(output: unknown) {
   return output; // typed and trusted
 }
 \`\`\`
-
 **Sampling discipline (separate creativity from precision)**
 - Low temperature for schema-bound steps; higher for ideation.
 - Use best-of-N with a judge for brittle steps; keep N small.
 - Fix seeds where supported; otherwise log logprobs for audit.
 - Stable prompts: canonical templates; explicit role and constraints.
-
 \`\`\`python
 # Python-like pseudocode
 PHASES = {
@@ -109,13 +104,11 @@ def run_step(phase, prompt, schema=None):
     return judge_select(outs)  # LLM-as-judge with rubric + deterministic checks
   return outs[0]
 \`\`\`
-
 **Validation layers (syntax → semantics → policy)**
 - Syntax: JSON schema, type checks, allowed enums.
 - Semantics: business rules, unit checks, referential integrity.
 - Policy: compliance, safety, PII, tool permissions.
 - Tool execution: dry-run, idempotency, side-effect gating.
-
 \`\`\`mermaid
 flowchart TD
   O[Agent Output] --> S[Schema Validator]
@@ -127,12 +120,10 @@ flowchart TD
   P -->|fail| RJ[Reject or Human]
   RP --> O
 \`\`\`
-
 **Repair loops (tight, bounded, and typed)**
 - Always include a reason for failure and a targeted fix hint.
 - Limit iterations; add circuit breakers and fallbacks.
 - Prefer surgical edits over full re-generation.
-
 \`\`\`python
 MAX_ITERS = 3
 
@@ -152,7 +143,6 @@ def repair_loop(task, attempt):
         return hard_fail(e)
   return hard_fail("exceeded repairs")
 \`\`\`
-
 \`\`\`mermaid
 sequenceDiagram
   participant A as Agent
@@ -165,12 +155,10 @@ sequenceDiagram
   A->>V: Regenerate minimally
   V-->>A: Pass
 \`\`\`
-
 **Quality Control Diagram (integrated in orchestration)**
 - Planner→Executor→Validator→Critic→Repair→Trace.
 - Every edge logged with metrics and provenance.
 - Accept only when all gates pass or escalate.
-
 \`\`\`mermaid
 sequenceDiagram
   autonumber
@@ -202,12 +190,10 @@ sequenceDiagram
   end
   O-->>U: Final result + trace id
 \`\`\`
-
 **Metrics, budgets, and drift checks (close the loop)**
 - Track first-pass yield, rounds-to-accept, p95 latency, cost.
 - Budget caps per agent; circuit breakers on repeated failures.
 - Regression tests on schema/rules/model updates.
-
 \`\`\`mermaid
 pie title Validation failure taxonomy (last 7 days)
   "Schema" : 35
@@ -267,7 +253,7 @@ pie title Validation failure taxonomy (last 7 days)
         remarkPlugins={[remarkGfm]}
         components={{
           code({node, inline, className, children, ...props}: any) {
-            const match = /language-(w+)/.exec(className || '');
+            const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
             
             // Handle inline code
