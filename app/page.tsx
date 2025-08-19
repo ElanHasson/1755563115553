@@ -14,8 +14,28 @@ export default function Presentation() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [showSpeakerNotes, setShowSpeakerNotes] = useState(false);
   const [showNarration, setShowNarration] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   
+  // Format time helper
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Handle progress bar click
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!audioRef.current || !duration) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const percentage = clickX / rect.width;
+    const newTime = percentage * duration;
+    audioRef.current.currentTime = newTime;
+    setCurrentTime(newTime);
+  };
+
   // Load audio when slide changes
   useEffect(() => {
     if (audioRef.current) {
@@ -24,8 +44,27 @@ export default function Presentation() {
       
       // Just load, don't auto-play
       audioRef.current.load();
+      setCurrentTime(0);
+      setDuration(0);
     }
   }, [currentSlide]);
+
+  // Setup audio event listeners
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+    
+    audio.addEventListener('timeupdate', handleTimeUpdate);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    
+    return () => {
+      audio.removeEventListener('timeupdate', handleTimeUpdate);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+    };
+  }, []);
   
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -139,16 +178,35 @@ export default function Presentation() {
         </button>
         <span>{currentSlide + 1} / {slideComponents.length}</span>
         <button 
-          onClick={() => setIsPlaying(!isPlaying)}
-        >
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-        <button 
           onClick={() => setCurrentSlide(Math.min(slideComponents.length - 1, currentSlide + 1))}
           disabled={currentSlide === slideComponents.length - 1}
         >
           Next
         </button>
+        
+        <div className="audio-controls">
+          <button 
+            onClick={() => setIsPlaying(!isPlaying)}
+            className="play-button"
+          >
+            {isPlaying ? '⏸' : '▶'}
+          </button>
+          
+          <div className="time-display">
+            <span>{formatTime(currentTime)}</span>
+            <div 
+              className="progress-bar"
+              onClick={handleProgressClick}
+            >
+              <div 
+                className="progress-fill"
+                style={{ width: duration > 0 ? `${(currentTime / duration) * 100}%` : '0%' }}
+              />
+            </div>
+            <span>{formatTime(duration)}</span>
+          </div>
+        </div>
+        
         <button 
           onClick={() => setShowSpeakerNotes(!showSpeakerNotes)}
         >
