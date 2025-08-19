@@ -10,7 +10,7 @@ export default function Slide() {
 
 ---
 
-Conductor (centralized orchestrator)
+## Conductor (centralized orchestrator)
 - Strong control and observability; simple to reason about end-to-end
 - Great for 101 builds, regulated flows, and strict SLAs
 - Risks: bottleneck, single point of failure, coordinator fatigue
@@ -44,7 +44,7 @@ for task in dag.ready():
 
 ---
 
-Blackboard (shared memory)
+## Blackboard (shared memory)
 - Loose coupling via shared artifacts; scales concurrency
 - Convergence is a design problem: norms, locks, and merge rules
 - Use versioned artifacts, TTLs, and critics that watch the board
@@ -77,7 +77,7 @@ annotate("outline", critique)
 
 ---
 
-Marketplace (contract net)
+## Marketplace (contract net)
 - Dynamic allocation by capability, price, and confidence
 - Useful when agent skills/costs vary or resources are elastic
 - Needs auction design: bidding schema, deadlines, tie-breakers
@@ -109,7 +109,7 @@ assert validate(result)
 
 ---
 
-Event Bus (event-driven choreography)
+## Event Bus (event-driven choreography)
 - Decoupled producers/consumers; resilient and composable
 - Harder to reason about global guarantees; use idempotency and tracing
 - Great for cross-team integrations and long-lived processes
@@ -141,7 +141,7 @@ def handle(evt):
 
 ---
 
-Choosing quickly
+## Choosing quickly
 - Prototype and regulated flows: start with Conductor
 - Exploration or many specialists: add a Blackboard
 - Variable skills/costs or scarce tools: introduce a Marketplace

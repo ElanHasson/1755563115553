@@ -11,7 +11,7 @@ export default function Slide() {
 
 ---
 
-Agent contract (small, strict)
+## Agent contract (small, strict)
 - Inputs: context, allowed tools, budget/timeouts, memory slice
 - Outputs: structured_result, tool_calls, next_actions, metrics
 - Determinism via JSON schema + validator
@@ -68,7 +68,7 @@ def run_agent(input_ctx, model, schema, system_prompt):
 
 ---
 
-Tool adapter (typed, sandboxed)
+## Tool adapter (typed, sandboxed)
 - Name/version, JSON args, typed return
 - Side-effect policy: read-only vs write; idempotency_key
 - Retries with backoff, timeouts, quotas
@@ -107,7 +107,7 @@ SEARCH_TOOL = Tool("search_web", "1.0.0", search_web, read_only=True)
 
 ---
 
-Planner skeleton (decompose -> DAG)
+## Planner skeleton (decompose -> DAG)
 - Returns tasks and dependencies
 - Keep it explicit and auditable
 
@@ -125,7 +125,7 @@ def plan(goal: str, constraints: dict):
 
 ---
 
-Orchestrator loop (centralized)
+## Orchestrator loop (centralized)
 - Ready set = tasks with deps satisfied
 - Parallelize independent tasks
 - Validate, update DAG, handle failures
@@ -149,7 +149,7 @@ def orchestrate(goal, model):
 
 ---
 
-DAG: planner -> executors -> critic
+## DAG: planner -> executors -> critic
 
 \`\`\`mermaid
 graph LR
@@ -162,7 +162,7 @@ graph LR
 
 ---
 
-Execution sequence (one task)
+## Execution sequence (one task)
 
 \`\`\`mermaid
 sequenceDiagram
@@ -187,7 +187,7 @@ sequenceDiagram
 
 ---
 
-Flow control with quality gates
+## Flow control with quality gates
 - Schema -> business rules -> policy -> accept/repair
 - Circuit breakers, retries, max-iterations
 
@@ -206,7 +206,7 @@ flowchart TD
 
 ---
 
-Minimal live test outline
+## Minimal live test outline
 - Run planner -> view DAG
 - Execute research with SEARCH_TOOL
 - Validate via schema + critic
