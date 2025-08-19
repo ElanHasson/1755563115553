@@ -1,6 +1,9 @@
 {
   "name": "building-complex-multi-agent-orchestrations-and-making-all-your-customer-s-dreams-come-true",
   "version": "1.0.0",
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",
