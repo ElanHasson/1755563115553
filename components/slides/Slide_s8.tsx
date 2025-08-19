@@ -65,8 +65,8 @@ sequenceDiagram
 # Python: write-time PII scrubber with provenance
 PII_PATTERNS = {
     "email": r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}",
-    "phone": r"\+?\d[\d\-\s]{7,}\d",
-    "ssn": r"\b\d{3}-\d{2}-\d{4}\b"
+    "phone": r"\\+?\\d[\\d\\-\\s]{7,}\\d",
+    "ssn": r"\\b\\d{3}-\\d{2}-\\d{4}\\b"
 }
 
 def scrub(record, policy, source):

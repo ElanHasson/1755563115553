@@ -35,7 +35,7 @@ export default function Slide() {
 \`\`\`
 \`\`\`mermaid
 flowchart LR
-  C[Constitution\n(contracts, policies, evals)] --> O[Orchestrator/DAG]
+  C["Constitution\n(contracts, policies, evals)"] --> O[Orchestrator/DAG]
   O --> P[Planner]
   O --> A1[Agents]
   O --> V[Validators/Critic]
