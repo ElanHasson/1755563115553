@@ -18,6 +18,27 @@ export default function Presentation() {
   const [duration, setDuration] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   
+  // Initialize slide from URL on mount
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      const match = hash.match(/^#\/slide\/(\d+)$/);
+      if (match) {
+        const slideNum = parseInt(match[1]) - 1; // Convert to 0-based index
+        if (slideNum >= 0 && slideNum < slideComponents.length) {
+          setCurrentSlide(slideNum);
+        }
+      }
+    };
+    
+    // Check initial hash
+    handleHashChange();
+    
+    // Listen for hash changes
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+  
   // Format time helper
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -36,8 +57,11 @@ export default function Presentation() {
     setCurrentTime(newTime);
   };
 
-  // Load audio when slide changes
+  // Load audio when slide changes and update URL
   useEffect(() => {
+    // Update URL hash
+    window.location.hash = `/slide/${currentSlide + 1}`;
+    
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.src = `/audio/slide-${presentationData.slides[currentSlide].id}.mp3`;
