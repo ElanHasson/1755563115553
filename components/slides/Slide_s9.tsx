@@ -159,7 +159,7 @@ sequenceDiagram
   
   useEffect(() => {
     mermaid.initialize({ 
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'dark',
       themeVariables: {
         primaryColor: '#667eea',
@@ -180,18 +180,60 @@ sequenceDiagram
     // Find and render mermaid diagrams
     const renderDiagrams = async () => {
       const diagrams = document.querySelectorAll('.language-mermaid');
-      for (let i = 0; i < diagrams.length; i++) {
-        const element = diagrams[i];
-        const graphDefinition = element.textContent;
-        const id = `mermaid-${mermaidRef.current++}`;
+      const diagramsArray = Array.from(diagrams);
+      
+      for (let i = 0; i < diagramsArray.length; i++) {
+        const element = diagramsArray[i] as HTMLElement;
+        
+        // Skip if already processed
+        if (!element || element.classList.contains('mermaid-processed')) {
+          continue;
+        }
+        
+        const graphDefinition = element.textContent || '';
+        const uniqueId = `mermaid-${Date.now()}-${i}`;
         
         try {
-          const { svg } = await mermaid.render(id, graphDefinition);
-          element.innerHTML = svg;
-          element.classList.remove('language-mermaid');
-          element.classList.add('mermaid-rendered');
-        } catch (error) {
+          // Mark as processed immediately
+          element.classList.add('mermaid-processed');
+          
+          // Create a temporary div for Mermaid to render into
+          const tempDiv = document.createElement('div');
+          tempDiv.id = uniqueId;
+          tempDiv.style.display = 'none';
+          document.body.appendChild(tempDiv);
+          
+          // Render the diagram
+          const { svg } = await mermaid.render(uniqueId, graphDefinition);
+          
+          // Create the final container
+          const container = document.createElement('div');
+          container.className = 'mermaid-rendered';
+          container.innerHTML = svg;
+          
+          // Replace the pre element with our container
+          const parent = element.parentNode;
+          if (parent) {
+            parent.insertBefore(container, element);
+            parent.removeChild(element);
+          }
+          
+          // Clean up temp div
+          tempDiv.remove();
+          
+        } catch (error: any) {
           console.error('Mermaid rendering error:', error);
+          // Remove the processed flag
+          element.classList.remove('mermaid-processed');
+          
+          // Clean up temp div if it exists
+          const tempDiv = document.getElementById(uniqueId);
+          if (tempDiv) {
+            tempDiv.remove();
+          }
+          
+          // Show error message in the element
+          element.innerHTML = `<span style="color: red;">Mermaid Error: ${error.message || 'Failed to render diagram'}</span>`;
         }
       }
     };
