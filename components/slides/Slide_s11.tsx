@@ -1,9 +1,8 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { useEffect, useRef } from 'react';
-import mermaid from 'mermaid';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import Mermaid from '../../components/Mermaid';
 
 export default function Slide() {
   const markdown = `- Live poll: What's your risk appetite today?
@@ -58,91 +57,6 @@ flowchart TD
 - Philosophical pointer
   - We don’t eliminate uncertainty; we circumscribe it with contracts, critics, and budgets
   - Your constitution > your framework; frameworks just make the constitution executable`;
-  const mermaidRef = useRef(0);
-  
-  useEffect(() => {
-    mermaid.initialize({ 
-      startOnLoad: false,
-      theme: 'dark',
-      themeVariables: {
-        primaryColor: '#667eea',
-        primaryTextColor: '#fff',
-        primaryBorderColor: '#7c3aed',
-        lineColor: '#5a67d8',
-        secondaryColor: '#764ba2',
-        tertiaryColor: '#667eea',
-        background: '#1a202c',
-        mainBkg: '#2d3748',
-        secondBkg: '#4a5568',
-        tertiaryBkg: '#718096',
-        textColor: '#fff',
-        nodeTextColor: '#fff',
-      }
-    });
-    
-    // Find and render mermaid diagrams
-    const renderDiagrams = async () => {
-      const diagrams = document.querySelectorAll('.language-mermaid');
-      const diagramsArray = Array.from(diagrams);
-      
-      for (let i = 0; i < diagramsArray.length; i++) {
-        const element = diagramsArray[i] as HTMLElement;
-        
-        // Skip if already processed
-        if (!element || element.classList.contains('mermaid-processed')) {
-          continue;
-        }
-        
-        const graphDefinition = element.textContent || '';
-        const uniqueId = `mermaid-${Date.now()}-${i}`;
-        
-        try {
-          // Mark as processed immediately
-          element.classList.add('mermaid-processed');
-          
-          // Create a temporary div for Mermaid to render into
-          const tempDiv = document.createElement('div');
-          tempDiv.id = uniqueId;
-          tempDiv.style.display = 'none';
-          document.body.appendChild(tempDiv);
-          
-          // Render the diagram
-          const { svg } = await mermaid.render(uniqueId, graphDefinition);
-          
-          // Create the final container
-          const container = document.createElement('div');
-          container.className = 'mermaid-rendered';
-          container.innerHTML = svg;
-          
-          // Replace the pre element with our container
-          const parent = element.parentNode;
-          if (parent) {
-            parent.insertBefore(container, element);
-            parent.removeChild(element);
-          }
-          
-          // Clean up temp div
-          tempDiv.remove();
-          
-        } catch (error: any) {
-          console.error('Mermaid rendering error:', error);
-          // Remove the processed flag
-          element.classList.remove('mermaid-processed');
-          
-          // Clean up temp div if it exists
-          const tempDiv = document.getElementById(uniqueId);
-          if (tempDiv) {
-            tempDiv.remove();
-          }
-          
-          // Show error message in the element
-          element.innerHTML = `<span style="color: red;">Mermaid Error: ${error.message || 'Failed to render diagram'}</span>`;
-        }
-      }
-    };
-    
-    renderDiagrams();
-  }, [markdown]);
   
   return (
     <div className="slide markdown-slide">
@@ -166,9 +80,7 @@ flowchart TD
             // Handle mermaid diagrams
             if (language === 'mermaid') {
               return (
-                <pre className="language-mermaid">
-                  <code>{String(children).replace(/\n$/, '')}</code>
-                </pre>
+                <Mermaid chart={String(children).replace(/\n$/, '')} />
               );
             }
             
